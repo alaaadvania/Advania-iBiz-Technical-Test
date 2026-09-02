@@ -96,4 +96,35 @@ public class ProductFunctions
             return response;
         }
     }
+
+    [Function("GetProducts")]
+    public async Task<HttpResponseData> GetProducts(
+        [HttpTrigger(
+            AuthorizationLevel.Function,
+            "get",
+            Route = "products")]
+        HttpRequestData request)
+    {
+        try
+        {
+            var products = await _productService.GetProductsAsync();
+
+            var response = request.CreateResponse(
+                HttpStatusCode.OK);
+
+            await response.WriteAsJsonAsync(products);
+
+            return response;
+        }
+        catch (Exception)
+        {
+            var response = request.CreateResponse(
+                HttpStatusCode.InternalServerError);
+
+            await response.WriteStringAsync(
+                "An unexpected error occurred.");
+
+            return response;
+        }
+    }
 }
