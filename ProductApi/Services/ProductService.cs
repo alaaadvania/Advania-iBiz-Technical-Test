@@ -31,7 +31,7 @@ public class ProductService : IProductService
             PartitionKey = "Products",
             RowKey = Guid.NewGuid().ToString(),
             Name = product.Name,
-            Price = product.Price
+            Price = (double)product.Price
         };
 
         await _tableClient.AddEntityAsync(entity);
@@ -46,7 +46,7 @@ public class ProductService : IProductService
             products.Add(new Product
             {
                 Name = entity.Name,
-                Price = entity.Price
+                Price = (decimal)entity.Price
             });
         }
 

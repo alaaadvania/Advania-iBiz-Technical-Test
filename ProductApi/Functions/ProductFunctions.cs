@@ -1,19 +1,22 @@
-﻿using System.Net;
-using System.Text.Json;
-using Microsoft.Azure.Functions.Worker;
+﻿using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Logging;
 using ProductApi.Models;
 using ProductApi.Services;
+using System.Net;
+using System.Text.Json;
 
 namespace ProductApi.Functions;
 
 public class ProductFunctions
 {
     private readonly IProductService _productService;
+    private readonly ILogger<ProductFunctions> _logger;
 
-    public ProductFunctions(IProductService productService)
+    public ProductFunctions(IProductService productService, ILogger<ProductFunctions> logger)
     {
         _productService = productService;
+        _logger = logger;
     }
 
     [Function("CreateProduct")]
@@ -40,6 +43,8 @@ public class ProductFunctions
 
                 await badRequest.WriteStringAsync(
                     "Request body is required.");
+                
+                _logger.LogWarning("Request body is required.");
 
                 return badRequest;
             }
@@ -51,6 +56,8 @@ public class ProductFunctions
 
                 await badRequest.WriteStringAsync(
                     "Product name is required.");
+                
+                _logger.LogWarning("Product name is required.");
 
                 return badRequest;
             }
@@ -62,6 +69,8 @@ public class ProductFunctions
 
                 await badRequest.WriteStringAsync(
                     "Product price cannot be negative.");
+               
+                _logger.LogWarning("Product price cannot be negative.");
 
                 return badRequest;
             }
@@ -83,6 +92,7 @@ public class ProductFunctions
             await response.WriteStringAsync(
                 "Invalid JSON.");
 
+            _logger.LogWarning("Invalid JSON in request body.");
             return response;
         }
         catch (Exception)
@@ -93,6 +103,7 @@ public class ProductFunctions
             await response.WriteStringAsync(
                 "An unexpected error occurred.");
 
+            _logger.LogError("An unexpected error occurred while creating a product.");
             return response;
         }
     }
@@ -123,6 +134,8 @@ public class ProductFunctions
 
             await response.WriteStringAsync(
                 "An unexpected error occurred.");
+
+            _logger.LogError("An unexpected error occurred while retrieving products.");
 
             return response;
         }
