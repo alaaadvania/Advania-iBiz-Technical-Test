@@ -24,6 +24,9 @@ public class ProductService : IProductService
         _tableClient.CreateIfNotExists();
     }
 
+    /// <summary>
+    /// Adds a product to Azure Table Storage.
+    /// </summary>
     public async Task AddProductAsync(Product product)
     {
         var entity = new ProductEntity
@@ -37,6 +40,9 @@ public class ProductService : IProductService
         await _tableClient.AddEntityAsync(entity);
     }
 
+    /// <summary>
+    /// Retrieves all products from Azure Table Storage.
+    /// </summary>
     public async Task<IReadOnlyList<Product>> GetProductsAsync()
     {
         var products = new List<Product>();
