@@ -19,6 +19,14 @@ public class ProductFunctions
         _logger = logger;
     }
 
+    /// <summary>
+    /// Creates a new product and stores it in Azure Table Storage.
+    /// </summary>
+    /// <param name="request">The HTTP request containing the product data.</param>
+    /// <returns>
+    /// A 201 Created response when the product is successfully created,
+    /// or a 400 Bad Request response when the input is invalid.
+    /// </returns>
     [Function("CreateProduct")]
     public async Task<HttpResponseData> CreateProduct(
         [HttpTrigger(
@@ -108,6 +116,14 @@ public class ProductFunctions
         }
     }
 
+    /// <summary>
+    /// Retrieves all products stored in Azure Table Storage.
+    /// </summary>
+    /// <param name="request">The HTTP request.</param>
+    /// <returns>
+    /// A 200 OK response containing all products,
+    /// or a 500 Internal Server Error if an unexpected error occurs.
+    /// </returns>
     [Function("GetProducts")]
     public async Task<HttpResponseData> GetProducts(
         [HttpTrigger(
