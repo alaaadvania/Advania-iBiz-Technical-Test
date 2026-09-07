@@ -1,6 +1,7 @@
 ﻿using Azure.Data.Tables;
 using Microsoft.Extensions.Configuration;
 using ProductApi.Models;
+using System.Globalization;
 
 namespace ProductApi.Services;
 
@@ -34,7 +35,7 @@ public class ProductService : IProductService
             PartitionKey = "Products",
             RowKey = Guid.NewGuid().ToString(),
             Name = product.Name,
-            Price = (double)product.Price
+            Price = product.Price.ToString(CultureInfo.InvariantCulture)
         };
 
         await _tableClient.AddEntityAsync(entity);
@@ -52,7 +53,9 @@ public class ProductService : IProductService
             products.Add(new Product
             {
                 Name = entity.Name,
-                Price = (decimal)entity.Price
+                Price = decimal.Parse(
+        entity.Price,
+        CultureInfo.InvariantCulture)
             });
         }
 

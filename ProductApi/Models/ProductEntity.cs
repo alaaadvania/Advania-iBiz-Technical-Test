@@ -15,5 +15,5 @@ public class ProductEntity : ITableEntity
 
     public string Name { get; set; } = string.Empty;
 
-    public double Price { get; set; }
+    public string Price { get; set; } = string.Empty;
 }
